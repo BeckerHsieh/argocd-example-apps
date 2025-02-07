@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata: 
+  name: kustomize-guestbook
+  namespace: argo-cd
+#  annotations:
+#    notifications.argoproj.io/subscribe.slack: testnotify
+#    notifications.argoproj.io/subscribe.gmail: poyenhsieh@gmail.com;beckerhsieh@cht.com.tw
+#    notifications.argoproj.io/subscribe.webhook: ypm
+#    notifications.argoproj.io/subscribe.on-sync-succeeded.slack: testnotify
+#    notifications.argoproj.io/subscribe.on-sync-running.slack: testnotify
+#    notifications.argoproj.io/subscribe.on-sync-status-unknown.slack: testnotify
+#    notifications.argoproj.io/subscribe.on-deployed.slack: testnotify
+#    notifications.argoproj.io/subscribe.on-sync-succeeded.telegram: "-1066311188" 
+#    notifications.argoproj.io/subscribe.on-sync-running.telegram: "-1066311188"
+#    notifications.argoproj.io/subscribe.on-sync-status-unknown.telegram: "-1066311188"
+#    notifications.argoproj.io/subscribe.on-deployed.telegram: "-1066311188" 
+spec: 
+  destination: 
+    namespace: kustomize-ap
+    server: "https://kubernetes.default.svc"
+  project: default
+  source: 
+    path: kustomize-guestbook
+    repoURL: "https://github.com/BeckerHsieh/argocd-example-apps.git"
+    targetRevision: main
+    kustomize:
+      namePrefix: staging-
+      commonLabels:
+        app: demo2
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
